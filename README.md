@@ -56,8 +56,8 @@ A secure, full-stack AI-powered system for Uganda's Presidential Election that c
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/voice-ai-campaign.git
-   cd voice-ai-campaign
+   git clone https://github.com/VOXug/vx.git
+   cd vx
    ```
 
 2. Create a `.env` file from the example:
@@ -131,3 +131,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - OpenVoice for voice cloning technology
 - Flask and SQLAlchemy for the web framework
 - TailwindCSS for the UI components
+
+DAX +256778415709 OR +256702448951
