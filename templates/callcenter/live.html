@@ -1,0 +1,447 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}Live Call Center - Voice AI Campaign System{% endblock %}
+
+{% block breadcrumbs %}
+<a href="{{ url_for('admin.dashboard') }}" class="hover:text-primary-600">Dashboard</a>
+<i class="fas fa-chevron-right text-xs text-gray-400 mx-2"></i>
+<a href="{{ url_for('callcenter.index') }}" class="hover:text-primary-600">Call Center</a>
+<i class="fas fa-chevron-right text-xs text-gray-400 mx-2"></i>
+<span class="text-gray-700">Live Dashboard</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-bold text-gray-800">Live Call Center Dashboard</h2>
+        <div class="flex space-x-3">
+            <a href="{{ url_for('callcenter.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Overview
+            </a>
+            <a href="{{ url_for('callcenter.calls') }}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                <i class="fas fa-history mr-2"></i> Call History
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Real-time Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    <!-- Active Calls -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Active Calls</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1" id="active-calls">0</h3>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                <i class="fas fa-phone-alt"></i>
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="flex items-center">
+                <span class="text-xs text-gray-500">Refreshes every 5 seconds</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calls in Queue -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Calls in Queue</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1" id="queued-calls">0</h3>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="flex items-center">
+                <span class="text-xs text-gray-500">Refreshes every 5 seconds</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calls Today -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Calls Today</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1" id="calls-today">0</h3>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                <i class="fas fa-calendar-day"></i>
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="flex items-center">
+                <span class="text-xs text-gray-500">Refreshes every 5 seconds</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Rate -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Success Rate</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1" id="success-rate">0%</h3>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+        <div class="mt-4">
+            <div class="flex items-center">
+                <span class="text-xs text-gray-500">Refreshes every 5 seconds</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Calls -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-8">
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="font-semibold text-gray-800">Recent Calls</h3>
+        <button id="refresh-btn" class="text-sm text-gray-500 hover:text-gray-700">
+            <i class="fas fa-sync-alt mr-1"></i> Refresh
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table id="recent-calls-table" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Caller</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <!-- Call data will be loaded dynamically -->
+                <tr>
+                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                        Loading call data...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Live Calls Table -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-8">
+    <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="font-semibold text-gray-800">Live Calls</h3>
+        <button id="refresh-btn" class="text-primary-600 hover:text-primary-800 text-sm flex items-center">
+            <i class="fas fa-sync-alt mr-1"></i> Refresh
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Started</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" id="live-calls-table">
+                <!-- Sample call 1 -->
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+256 701 234 567</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Presidential Introduction</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">00:01:24</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            In Progress
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">09:32:15</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-primary-600 hover:text-primary-900 mr-3">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-phone-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+                <!-- Sample call 2 -->
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+256 782 567 890</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Voter Registration</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">00:00:45</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            In Progress
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">09:33:55</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-primary-600 hover:text-primary-900 mr-3">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-phone-slash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Campaign Controls -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow mb-8">
+    <h3 class="font-semibold text-gray-800 mb-4">Campaign Controls</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Active Campaigns -->
+        <div>
+            <h4 class="text-sm font-medium text-gray-700 mb-3">Active Campaigns</h4>
+            {% if active_campaigns %}
+                <div class="space-y-3 campaign-stats-container">
+                    {% for campaign in active_campaigns %}
+                    <div class="border border-gray-200 rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h5 class="font-medium text-gray-800">{{ campaign.name }}</h5>
+                                <p class="text-xs text-gray-500 mt-1">{{ campaign.description }}</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium hover:bg-yellow-200">
+                                    <i class="fas fa-pause mr-1"></i> Pause
+                                </button>
+                                <button class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium hover:bg-red-200">
+                                    <i class="fas fa-stop mr-1"></i> Stop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="space-y-3 campaign-stats-container">
+                    <!-- Campaign stats will be loaded dynamically -->
+                    <div class="border border-gray-200 rounded-lg p-3 mb-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h5 class="font-medium text-gray-800">Loading campaigns...</h5>
+                                <p class="text-xs text-gray-500 mt-1">Please wait</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Call Rate Controls -->
+        <div>
+            <h4 class="text-sm font-medium text-gray-700 mb-3">Call Rate Controls</h4>
+            <div class="border border-gray-200 rounded-lg p-4">
+                <div class="mb-4">
+                    <label for="callRateSlider" class="block text-sm font-medium text-gray-700 mb-1">Calls Per Minute</label>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm text-gray-600">1</span>
+                        <input type="range" id="callRateSlider" min="1" max="60" value="30" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <span class="text-sm text-gray-600">60</span>
+                    </div>
+                    <div class="text-center mt-1">
+                        <span class="text-sm font-medium text-gray-700" id="callRateValue">30 calls/min</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="maxConcurrentCalls" class="block text-sm font-medium text-gray-700 mb-1">Max Concurrent Calls</label>
+                    <select id="maxConcurrentCalls" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        <option value="10">10 calls</option>
+                        <option value="20">20 calls</option>
+                        <option value="50" selected>50 calls</option>
+                        <option value="100">100 calls</option>
+                        <option value="200">200 calls</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                        Apply Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Live Dashboard -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update call rate value display
+        const callRateSlider = document.getElementById('callRateSlider');
+        const callRateValue = document.getElementById('callRateValue');
+        
+        if (callRateSlider && callRateValue) {
+            callRateSlider.addEventListener('input', function() {
+                callRateValue.textContent = this.value + ' calls/min';
+            });
+        }
+        
+        // Refresh button functionality
+        const refreshBtn = document.getElementById('refresh-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                updateDashboard();
+                updateRecentCalls();
+            });
+        }
+        
+        // Initial update
+        updateDashboard();
+        updateRecentCalls();
+        
+        // Set interval for auto-refresh (every 5 seconds)
+        setInterval(function() {
+            updateDashboard();
+            updateRecentCalls();
+        }, 5000);
+    });
+    
+    function updateDashboard() {
+        // Fetch real data from our API
+        fetch('/callcenter/api/stats')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update dashboard with real data
+                document.getElementById('active-calls').textContent = data.in_progress_calls || 0;
+                document.getElementById('queued-calls').textContent = data.queued_calls || 0;
+                document.getElementById('calls-today').textContent = data.total_calls || 0;
+                document.getElementById('success-rate').textContent = (data.success_rate || 0).toFixed(1) + '%';
+                
+                // Update campaign stats if available
+                if (data.campaign_stats && data.campaign_stats.length > 0) {
+                    updateCampaignStats(data.campaign_stats);
+                }
+                
+                // Update timestamp on refresh button
+                const now = new Date();
+                const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                                now.getMinutes().toString().padStart(2, '0') + ':' + 
+                                now.getSeconds().toString().padStart(2, '0');
+                if (document.getElementById('refresh-btn')) {
+                    document.getElementById('refresh-btn').innerHTML = `<i class="fas fa-sync-alt mr-1"></i> Refreshed at ${timeString}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching dashboard data:', error);
+            });
+    }
+    
+    function updateRecentCalls() {
+        // Fetch recent calls from our API
+        fetch('/callcenter/api/recent-calls')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(calls => {
+                const tableBody = document.querySelector('#recent-calls-table tbody');
+                if (!tableBody) return;
+                
+                // Clear existing rows
+                tableBody.innerHTML = '';
+                
+                // Add new rows
+                if (calls.length === 0) {
+                    // No calls to display
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            No recent calls found
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                } else {
+                    calls.forEach(call => {
+                        const row = document.createElement('tr');
+                        
+                        // Format status with appropriate styling
+                        let statusClass = '';
+                        if (call.status === 'completed') {
+                            statusClass = 'bg-green-100 text-green-800';
+                        } else if (call.status === 'failed') {
+                            statusClass = 'bg-red-100 text-red-800';
+                        } else if (call.status === 'in-progress') {
+                            statusClass = 'bg-yellow-100 text-yellow-800';
+                        }
+                        
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">${call.phone_number}</div>
+                                <div class="text-xs text-gray-500">${call.campaign_name || 'Unknown'}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                    ${call.status}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${call.created_at}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="/callcenter/call/${call.id}" class="text-primary-600 hover:text-primary-900 mr-3">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching recent calls:', error);
+            });
+    }
+    
+    function updateCampaignStats(campaignStats) {
+        // Update campaign statistics in the UI
+        const campaignContainer = document.querySelector('.campaign-stats-container');
+        if (!campaignContainer) return;
+        
+        campaignContainer.innerHTML = '';
+        
+        campaignStats.forEach(campaign => {
+            const campaignElement = document.createElement('div');
+            campaignElement.className = 'border border-gray-200 rounded-lg p-3 mb-3';
+            campaignElement.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h5 class="font-medium text-gray-800">${campaign.name}</h5>
+                        <p class="text-xs text-gray-500 mt-1">
+                            ${campaign.total_calls} calls / ${campaign.completed_calls} completed (${campaign.completion_rate.toFixed(1)}%)
+                        </p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium hover:bg-yellow-200">
+                            <i class="fas fa-pause mr-1"></i> Pause
+                        </button>
+                        <button class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium hover:bg-red-200">
+                            <i class="fas fa-stop mr-1"></i> Stop
+                        </button>
+                    </div>
+                </div>
+            `;
+            campaignContainer.appendChild(campaignElement);
+        });
+    }
+</script>
+{% endblock %}

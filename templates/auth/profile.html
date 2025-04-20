@@ -1,0 +1,47 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}My Profile - Voice AI Campaign System{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex items-center mb-6">
+        <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+            <i class="fas fa-user-circle text-3xl"></i>
+        </div>
+        <div>
+            <h2 class="text-xl font-semibold">{{ current_user.username }}</h2>
+            <p class="text-gray-600">{{ current_user.email }}</p>
+        </div>
+    </div>
+    
+    <div class="border-t pt-4">
+        <h3 class="text-lg font-semibold mb-3">Account Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-500">Username</p>
+                <p class="font-medium">{{ current_user.username }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Email</p>
+                <p class="font-medium">{{ current_user.email }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Role</p>
+                <p class="font-medium">{% if current_user.is_admin %}Administrator{% else %}User{% endif %}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Last Login</p>
+                <p class="font-medium">{{ current_user.last_login.strftime('%Y-%m-%d %H:%M') if current_user.last_login else 'Never' }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-3">System Information</h3>
+        <div class="bg-gray-50 p-4 rounded-md">
+            <p><strong>Voice AI Campaign System</strong> - A secure, full-stack AI-powered system for Uganda's Presidential Election</p>
+            <p class="mt-2 text-sm text-gray-600">This system allows campaign teams to create and manage voice AI campaigns that call voters, talk to them in real-time using a cloned presidential voice, and respond intelligently in their preferred language.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

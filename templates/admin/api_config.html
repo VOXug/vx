@@ -1,0 +1,312 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}API Configuration - Voice AI Campaign System{% endblock %}
+
+{% block breadcrumbs %}
+<a href="{{ url_for('admin.dashboard') }}" class="hover:text-primary-600">Dashboard</a>
+<i class="fas fa-chevron-right text-xs text-gray-400 mx-2"></i>
+<span class="text-gray-700">API Configuration</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-bold text-gray-800">API Configuration</h2>
+        <button type="button" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors" onclick="document.getElementById('addApiModal').classList.remove('hidden')">
+            <i class="fas fa-plus mr-2"></i> Add New API Key
+        </button>
+    </div>
+</div>
+
+<!-- API Keys Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+    <!-- Twilio API Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">Twilio API</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Account SID</p>
+                <div class="flex items-center">
+                    <input type="password" value="AC1234567890abcdef1234567890abcdef" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="twilioSid">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="toggleVisibility('twilioSid')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('twilioSid')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Auth Token</p>
+                <div class="flex items-center">
+                    <input type="password" value="1234567890abcdef1234567890abcdef" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="twilioToken">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="toggleVisibility('twilioToken')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('twilioToken')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Phone Number</p>
+                <div class="flex items-center">
+                    <input type="text" value="+1234567890" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="twilioPhone">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('twilioPhone')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors" onclick="document.getElementById('editTwilioModal').classList.remove('hidden')">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                </button>
+                <button class="px-3 py-1.5 bg-green-50 text-green-600 rounded text-xs font-medium hover:bg-green-100 transition-colors">
+                    <i class="fas fa-check-circle mr-1"></i> Test Connection
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- OpenAI API Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">OpenAI API</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">API Key</p>
+                <div class="flex items-center">
+                    <input type="password" value="sk-1234567890abcdef1234567890abcdef" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="openaiKey">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="toggleVisibility('openaiKey')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('openaiKey')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Organization ID</p>
+                <div class="flex items-center">
+                    <input type="text" value="org-abcdef1234567890" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="openaiOrg">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('openaiOrg')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Models</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">gpt-4</span>
+                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">whisper-1</span>
+                </div>
+            </div>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                </button>
+                <button class="px-3 py-1.5 bg-green-50 text-green-600 rounded text-xs font-medium hover:bg-green-100 transition-colors">
+                    <i class="fas fa-check-circle mr-1"></i> Test Connection
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- OpenVoice API Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">OpenVoice API</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">API Key</p>
+                <div class="flex items-center">
+                    <input type="password" value="ov-1234567890abcdef1234567890abcdef" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="openvoiceKey">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="toggleVisibility('openvoiceKey')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('openvoiceKey')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Endpoint</p>
+                <div class="flex items-center">
+                    <input type="text" value="https://api.openvoice.ai/v1" class="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm w-full" readonly id="openvoiceEndpoint">
+                    <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="copyToClipboard('openvoiceEndpoint')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-1">Voice Models</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">presidential-en</span>
+                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">presidential-lg</span>
+                </div>
+            </div>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                </button>
+                <button class="px-3 py-1.5 bg-green-50 text-green-600 rounded text-xs font-medium hover:bg-green-100 transition-colors">
+                    <i class="fas fa-check-circle mr-1"></i> Test Connection
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add API Modal -->
+<div id="addApiModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Add New API Key</h3>
+            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="document.getElementById('addApiModal').classList.add('hidden')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form>
+            <div class="mb-4">
+                <label for="apiType" class="block text-sm font-medium text-gray-700 mb-1">API Type</label>
+                <select id="apiType" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">Select API Type</option>
+                    <option value="twilio">Twilio</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="openvoice">OpenVoice</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="apiName" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" id="apiName" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Enter API name">
+            </div>
+            
+            <div class="mb-4">
+                <label for="apiKey" class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+                <input type="password" id="apiKey" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Enter API key">
+            </div>
+            
+            <div class="mb-4">
+                <label for="apiSecret" class="block text-sm font-medium text-gray-700 mb-1">API Secret/Token (if applicable)</label>
+                <input type="password" id="apiSecret" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Enter API secret or token">
+            </div>
+            
+            <div class="mb-4">
+                <label for="apiEndpoint" class="block text-sm font-medium text-gray-700 mb-1">Endpoint URL (if applicable)</label>
+                <input type="text" id="apiEndpoint" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Enter API endpoint URL">
+            </div>
+            
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="apiActive" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                <label for="apiActive" class="ml-2 block text-sm text-gray-700">Active</label>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50" onclick="document.getElementById('addApiModal').classList.add('hidden')">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">Save API Key</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Twilio Modal -->
+<div id="editTwilioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Edit Twilio API</h3>
+            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="document.getElementById('editTwilioModal').classList.add('hidden')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form>
+            <div class="mb-4">
+                <label for="editTwilioName" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" id="editTwilioName" value="Twilio API" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+            
+            <div class="mb-4">
+                <label for="editTwilioSid" class="block text-sm font-medium text-gray-700 mb-1">Account SID</label>
+                <input type="text" id="editTwilioSid" value="AC1234567890abcdef1234567890abcdef" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+            
+            <div class="mb-4">
+                <label for="editTwilioToken" class="block text-sm font-medium text-gray-700 mb-1">Auth Token</label>
+                <input type="password" id="editTwilioToken" value="1234567890abcdef1234567890abcdef" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+            
+            <div class="mb-4">
+                <label for="editTwilioPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input type="text" id="editTwilioPhone" value="+1234567890" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            </div>
+            
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="editTwilioActive" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                <label for="editTwilioActive" class="ml-2 block text-sm text-gray-700">Active</label>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50" onclick="document.getElementById('editTwilioModal').classList.add('hidden')">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">Update API Key</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleVisibility(elementId) {
+        const element = document.getElementById(elementId);
+        if (element.type === 'password') {
+            element.type = 'text';
+        } else {
+            element.type = 'password';
+        }
+    }
+    
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        element.select();
+        document.execCommand('copy');
+        
+        // Show a temporary "Copied!" tooltip
+        const originalType = element.type;
+        const originalValue = element.value;
+        element.type = 'text';
+        element.value = 'Copied!';
+        
+        setTimeout(() => {
+            element.type = originalType;
+            element.value = originalValue;
+        }, 1000);
+    }
+</script>
+{% endblock %}

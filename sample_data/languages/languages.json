@@ -1,0 +1,22 @@
+[
+  {
+    "name": "English",
+    "code": "en",
+    "is_active": true
+  },
+  {
+    "name": "Swahili",
+    "code": "sw",
+    "is_active": true
+  },
+  {
+    "name": "Luganda",
+    "code": "lg",
+    "is_active": true
+  },
+  {
+    "name": "Runyankole",
+    "code": "nyn",
+    "is_active": true
+  }
+]

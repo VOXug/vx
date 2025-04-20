@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Voice AI Campaign System{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s;
+        }
+        
+        .content {
+            margin-left: 250px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-collapsed .sidebar {
+            margin-left: -250px;
+        }
+        
+        .sidebar-collapsed .content {
+            margin-left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+            
+            .content {
+                margin-left: 0;
+            }
+            
+            .sidebar-expanded .sidebar {
+                margin-left: 0;
+            }
+        }
+    </style>
+    
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen" id="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar bg-gray-800 text-white h-full fixed overflow-y-auto">
+            <div class="p-4 flex items-center justify-between">
+                <h1 class="text-xl font-bold">Voice AI Campaign</h1>
+                <button id="sidebar-toggle-btn" class="md:hidden text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="mt-4">
+                <ul>
+                    <li class="mb-1">
+                        <a href="{{ url_for('admin.dashboard') }}" class="block p-3 hover:bg-gray-700 {% if request.endpoint == 'admin.dashboard' %}bg-gray-700{% endif %}">
+                            <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('admin.api_config') }}" class="block p-3 hover:bg-gray-700 {% if request.endpoint == 'admin.api_config' %}bg-gray-700{% endif %}">
+                            <i class="fas fa-key mr-2"></i> API Configuration
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('voice.index') }}" class="block p-3 hover:bg-gray-700 {% if 'voice.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-microphone mr-2"></i> Voice Models
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('language.index') }}" class="block p-3 hover:bg-gray-700 {% if 'language.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-language mr-2"></i> Languages
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('conversation.index') }}" class="block p-3 hover:bg-gray-700 {% if 'conversation.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-comments mr-2"></i> Conversation Flows
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('voter.index') }}" class="block p-3 hover:bg-gray-700 {% if 'voter.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-users mr-2"></i> Voter Lists
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('voter.do_not_call') }}" class="block p-3 hover:bg-gray-700 {% if request.endpoint == 'voter.do_not_call' %}bg-gray-700{% endif %}">
+                            <i class="fas fa-ban mr-2"></i> Do Not Call List
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('campaign.index') }}" class="block p-3 hover:bg-gray-700 {% if 'campaign.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-bullhorn mr-2"></i> Campaigns
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('reports.index') }}" class="block p-3 hover:bg-gray-700 {% if 'reports.' in request.endpoint %}bg-gray-700{% endif %}">
+                            <i class="fas fa-chart-bar mr-2"></i> Reports
+                        </a>
+                    </li>
+                    {% if current_user.is_admin %}
+                    <li class="mb-1">
+                        <a href="{{ url_for('admin.users') }}" class="block p-3 hover:bg-gray-700 {% if request.endpoint == 'admin.users' %}bg-gray-700{% endif %}">
+                            <i class="fas fa-user-cog mr-2"></i> User Management
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="mb-1">
+                        <a href="{{ url_for('auth.profile') }}" class="block p-3 hover:bg-gray-700 {% if request.endpoint == 'auth.profile' %}bg-gray-700{% endif %}">
+                            <i class="fas fa-user mr-2"></i> My Profile
+                        </a>
+                    </li>
+                    <li class="mb-1">
+                        <a href="{{ url_for('auth.logout') }}" class="block p-3 hover:bg-gray-700">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content flex-1 overflow-x-hidden overflow-y-auto">
+            <!-- Top Navbar -->
+            <div class="bg-white shadow-md p-4 flex justify-between items-center">
+                <button id="sidebar-toggle" class="text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="flex items-center">
+                    <span class="mr-2">{{ current_user.username }}</span>
+                    <a href="{{ url_for('auth.profile') }}" class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-user-circle text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="p-6">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-4 p-4 rounded-md {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% elif category == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                                {{ message }}
+                                <button type="button" class="float-right" onclick="this.parentElement.style.display='none'">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Title -->
+                <h1 class="text-2xl font-bold mb-6">{% block page_title %}{{ title }}{% endblock %}</h1>
+                
+                <!-- Page Content -->
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const appContainer = document.getElementById('app-container');
+            
+            sidebarToggle.addEventListener('click', function() {
+                appContainer.classList.toggle('sidebar-collapsed');
+                appContainer.classList.toggle('sidebar-expanded');
+            });
+            
+            // Handle responsive sidebar on mobile
+            if (window.innerWidth < 768) {
+                appContainer.classList.add('sidebar-collapsed');
+            } else {
+                appContainer.classList.remove('sidebar-collapsed');
+            }
+            
+            window.addEventListener('resize', function() {
+                if (window.innerWidth < 768) {
+                    appContainer.classList.add('sidebar-collapsed');
+                    appContainer.classList.remove('sidebar-expanded');
+                }
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

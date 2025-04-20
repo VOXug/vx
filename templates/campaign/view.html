@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Campaign: {{ campaign.name }} - Voice AI Campaign System{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h1 class="text-2xl font-bold">{{ campaign.name }}</h1>
+        <p class="text-gray-600">{{ campaign.description }}</p>
+    </div>
+    <div class="flex space-x-2">
+        {% if campaign.status == 'draft' %}
+            <form action="{{ url_for('campaign.update_status', id=campaign.id, status='active') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                    <i class="fas fa-play mr-1"></i> Start Campaign
+                </button>
+            </form>
+        {% elif campaign.status == 'active' %}
+            <form action="{{ url_for('campaign.update_status', id=campaign.id, status='paused') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
+                    <i class="fas fa-pause mr-1"></i> Pause Campaign
+                </button>
+            </form>
+        {% elif campaign.status == 'paused' %}
+            <form action="{{ url_for('campaign.update_status', id=campaign.id, status='active') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                    <i class="fas fa-play mr-1"></i> Resume Campaign
+                </button>
+            </form>
+        {% endif %}
+        
+        <a href="{{ url_for('campaign.edit_campaign', id=campaign.id) }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <i class="fas fa-edit mr-1"></i> Edit Campaign
+        </a>
+    </div>
+</div>
+
+<!-- Campaign Status Card -->
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex items-center mb-4">
+        <div class="mr-4">
+            <span class="status-indicator status-{{ campaign.status }}"></span>
+        </div>
+        <div>
+            <h2 class="text-lg font-semibold">Status: {{ campaign.status|capitalize }}</h2>
+            <p class="text-gray-600">
+                {% if campaign.start_date %}
+                    Started: {{ campaign.start_date.strftime('%Y-%m-%d %H:%M') }}
+                {% endif %}
+                {% if campaign.end_date %}
+                    | Ends: {{ campaign.end_date.strftime('%Y-%m-%d %H:%M') }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gray-50 p-4 rounded-md">
+            <h3 class="text-sm font-medium text-gray-500 mb-1">Conversation Flow</h3>
+            <p class="font-semibold">{{ campaign.conversation_flow.name }}</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-md">
+            <h3 class="text-sm font-medium text-gray-500 mb-1">Voter List</h3>
+            <p class="font-semibold">{{ campaign.voter_list.name }}</p>
+            <p class="text-sm text-gray-600">{{ campaign.voter_list.valid_numbers }} valid numbers</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-md">
+            <h3 class="text-sm font-medium text-gray-500 mb-1">Call Limits</h3>
+            <p class="font-semibold">{{ campaign.max_calls_per_day }} per day</p>
+            <p class="text-sm text-gray-600">{{ campaign.max_calls_per_hour }} per hour</p>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                <i class="fas fa-phone-alt text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Total Calls</p>
+                <p class="text-2xl font-semibold">{{ stats.total_calls }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-check text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Completed Calls</p>
+                <p class="text-2xl font-semibold">{{ stats.completed_calls }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                <i class="fas fa-times text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Failed Calls</p>
+                <p class="text-2xl font-semibold">{{ stats.failed_calls }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <i class="fas fa-spinner text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">In Progress</p>
+                <p class="text-2xl font-semibold">{{ stats.in_progress_calls }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sentiment Distribution -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-smile text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Positive Sentiment</p>
+                <p class="text-2xl font-semibold">{{ stats.positive_sentiment }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <i class="fas fa-meh text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Neutral Sentiment</p>
+                <p class="text-2xl font-semibold">{{ stats.neutral_sentiment }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                <i class="fas fa-frown text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-gray-500 text-sm">Negative Sentiment</p>
+                <p class="text-2xl font-semibold">{{ stats.negative_sentiment }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Test Call Form -->
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Test Campaign Call</h2>
+    <form action="{{ url_for('campaign.test_call', id=campaign.id) }}" method="POST" class="flex items-end space-x-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="flex-1">
+            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <input type="text" name="phone_number" id="phone_number" required placeholder="+256701234567" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+            <i class="fas fa-phone mr-1"></i> Make Test Call
+        </button>
+    </form>
+</div>
+
+<!-- Recent Call Logs -->
+<div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold">Recent Calls</h2>
+        <a href="{{ url_for('reports.call_logs', campaign_id=campaign.id) }}" class="text-blue-600 hover:text-blue-800 text-sm">View All</a>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Language</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sentiment</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for call in call_logs %}
+                <tr>
+                    <td class="py-3 px-4 whitespace-nowrap">{{ call.phone_number }}</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if call.status == 'completed' %}bg-green-100 text-green-800
+                            {% elif call.status == 'failed' %}bg-red-100 text-red-800
+                            {% elif call.status == 'in-progress' %}bg-blue-100 text-blue-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ call.status }}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap">{{ call.duration or 0 }}s</td>
+                    <td class="py-3 px-4 whitespace-nowrap">{{ call.detected_language or 'Unknown' }}</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if call.sentiment == 'positive' %}bg-green-100 text-green-800
+                            {% elif call.sentiment == 'negative' %}bg-red-100 text-red-800
+                            {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            {{ call.sentiment or 'Unknown' }}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap">{{ call.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="py-4 px-4 text-center text-gray-500">No call logs found for this campaign.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

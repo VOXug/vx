@@ -1,0 +1,16 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}Page Not Found - Voice AI Campaign System{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center py-12">
+    <div class="text-6xl text-gray-400 mb-6">
+        <i class="fas fa-map-signs"></i>
+    </div>
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">404 - Page Not Found</h1>
+    <p class="text-xl text-gray-600 mb-8">The page you are looking for doesn't exist or has been moved.</p>
+    <a href="{{ url_for('admin.dashboard') }}" class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+        <i class="fas fa-home mr-2"></i> Return to Dashboard
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,547 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}Dashboard - Voice AI Campaign System{% endblock %}
+
+{% block breadcrumbs %}
+<span class="text-gray-700">Dashboard</span>
+{% endblock %}
+
+{% block content %}
+<!-- Quick Actions -->
+<div class="mb-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-bold text-gray-800">Campaign Dashboard</h2>
+        <div class="flex flex-wrap gap-3">
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i> New Campaign
+            </a>
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                <i class="fas fa-upload mr-2"></i> Import Voters
+            </a>
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                <i class="fas fa-download mr-2"></i> Export Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Overview -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Campaigns Card -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-700">Total Campaigns</h3>
+            <span class="p-2 rounded-full bg-blue-100 text-blue-600">
+                <i class="fas fa-bullhorn"></i>
+            </span>
+        </div>
+        <div class="flex items-end">
+            <span class="text-3xl font-bold text-gray-800">{{ stats.total_campaigns }}</span>
+            <span class="text-sm text-gray-500 ml-2 mb-1">campaigns</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500">Last 7 days</span>
+                <span class="text-green-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i> 12%
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Active Campaigns Card -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-700">Active Campaigns</h3>
+            <span class="p-2 rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-play-circle"></i>
+            </span>
+        </div>
+        <div class="flex items-end">
+            <span class="text-3xl font-bold text-gray-800">{{ stats.active_campaigns }}</span>
+            <span class="text-sm text-gray-500 ml-2 mb-1">active</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500">Status</span>
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                    All Running
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Total Calls Card -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-700">Total Calls</h3>
+            <span class="p-2 rounded-full bg-purple-100 text-purple-600">
+                <i class="fas fa-phone-alt"></i>
+            </span>
+        </div>
+        <div class="flex items-end">
+            <span class="text-3xl font-bold text-gray-800">{{ stats.total_calls }}</span>
+            <span class="text-sm text-gray-500 ml-2 mb-1">calls</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500">Today</span>
+                <span class="text-blue-500 flex items-center">
+                    <i class="fas fa-phone mr-1"></i> {{ stats.calls_today }}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Rate Card -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-700">Success Rate</h3>
+            <span class="p-2 rounded-full bg-yellow-100 text-yellow-600">
+                <i class="fas fa-chart-line"></i>
+            </span>
+        </div>
+        <div class="flex items-end">
+            <span class="text-3xl font-bold text-gray-800">{{ stats.success_rate }}%</span>
+            <span class="text-sm text-gray-500 ml-2 mb-1">success</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500">Target</span>
+                <span class="text-yellow-500 flex items-center">
+                    <i class="fas fa-bullseye mr-1"></i> 85%
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Languages Card -->
+    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-700">Languages</h3>
+            <span class="p-2 rounded-full bg-indigo-100 text-indigo-600">
+                <i class="fas fa-language"></i>
+            </span>
+        </div>
+        <div class="flex items-end">
+            <span class="text-3xl font-bold text-gray-800">{{ stats.languages|length }}</span>
+            <span class="text-sm text-gray-500 ml-2 mb-1">languages</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="flex flex-wrap gap-2">
+                {% for language in stats.languages %}
+                <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full flex items-center">
+                    <span class="w-2 h-2 bg-indigo-500 rounded-full mr-1"></span>
+                    {{ language }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Management Section -->
+<div class="mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-gray-800">Active Campaigns</h2>
+        <a href="#" class="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center">
+            <i class="fas fa-plus-circle mr-1"></i> Create New Campaign
+        </a>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <!-- Presidential Introduction Campaign Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-semibold text-gray-800">Presidential Introduction</h3>
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">Outbound Calls</p>
+                            <p class="text-xs text-gray-500">Started: Apr 18, 2025</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-gray-700">2,450 / 5,000</p>
+                        <p class="text-xs text-gray-500">49% Complete</p>
+                    </div>
+                </div>
+                
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="bg-primary-600 h-2 rounded-full" style="width: 49%"></div>
+                </div>
+                
+                <div class="flex justify-between text-xs text-gray-500 mb-4">
+                    <span>Success Rate: 78%</span>
+                    <span>Avg. Duration: 2m 15s</span>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-chart-bar mr-1"></i> Analytics
+                    </a>
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-pause mr-1"></i> Pause
+                    </a>
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-cog mr-1"></i> Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Voter Registration Campaign Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-semibold text-gray-800">Voter Registration</h3>
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-700">Outbound Calls</p>
+                            <p class="text-xs text-gray-500">Started: Apr 15, 2025</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-gray-700">3,214 / 4,000</p>
+                        <p class="text-xs text-gray-500">80% Complete</p>
+                    </div>
+                </div>
+                
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="bg-primary-600 h-2 rounded-full" style="width: 80%"></div>
+                </div>
+                
+                <div class="flex justify-between text-xs text-gray-500 mb-4">
+                    <span>Success Rate: 82%</span>
+                    <span>Avg. Duration: 1m 45s</span>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-chart-bar mr-1"></i> Analytics
+                    </a>
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-pause mr-1"></i> Pause
+                    </a>
+                    <a href="#" class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-cog mr-1"></i> Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add New Campaign Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-dashed border-gray-300 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-8 flex flex-col items-center justify-center h-full">
+                <div class="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 mb-4">
+                    <i class="fas fa-plus text-xl"></i>
+                </div>
+                <h3 class="font-semibold text-gray-800 mb-2">Create New Campaign</h3>
+                <p class="text-gray-500 text-sm text-center mb-4">Set up a new voice campaign with customized conversation flows</p>
+                <a href="#" class="px-4 py-2 bg-primary-600 text-white rounded-md text-sm font-medium hover:bg-primary-700 transition-colors">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Call Distribution Chart -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-gray-800">Call Distribution</h2>
+            <div class="flex space-x-2">
+                <button class="px-3 py-1 text-xs font-medium rounded bg-primary-50 text-primary-600 hover:bg-primary-100 transition-colors">Daily</button>
+                <button class="px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Weekly</button>
+                <button class="px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Monthly</button>
+            </div>
+        </div>
+        <canvas id="callDistributionChart" height="300"></canvas>
+    </div>
+    
+    <!-- Sentiment Analysis Chart -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-gray-800">Sentiment Analysis</h2>
+            <div class="flex space-x-2">
+                <button class="px-3 py-1 text-xs font-medium rounded bg-primary-50 text-primary-600 hover:bg-primary-100 transition-colors">All Campaigns</button>
+                <button class="px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Filter</button>
+            </div>
+        </div>
+        <canvas id="sentimentChart" height="300"></canvas>
+    </div>
+</div>
+
+<!-- Recent Calls Section -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow mb-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-semibold text-gray-800">Recent Calls</h2>
+        <div class="flex items-center space-x-4">
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-filter mr-1"></i>
+                    <span class="text-sm">Filter</span>
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                </button>
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20" style="display: none;">
+                    <div class="py-2">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">All Calls</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Completed Calls</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Failed Calls</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">In-Progress Calls</a>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="text-primary-600 hover:text-primary-700 text-sm font-medium">View All</a>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Phone Number</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Campaign</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Status</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Duration</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Language</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Sentiment</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Time</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+                <!-- Demo data since we don't have real call data yet -->
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">+256 701 234 567</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Presidential Introduction</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Completed
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2m 15s</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Luganda</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Positive
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2025-04-20 08:45</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-primary-600 hover:text-primary-800" title="View Transcript">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button class="text-primary-600 hover:text-primary-800" title="Play Recording">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">+256 772 345 678</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Voter Registration</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Completed
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">1m 45s</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">English</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Positive
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2025-04-20 09:12</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-primary-600 hover:text-primary-800" title="View Transcript">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button class="text-primary-600 hover:text-primary-800" title="Play Recording">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">+256 712 456 789</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Presidential Introduction</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Failed
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">0m 15s</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Unknown</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                            Unknown
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2025-04-20 09:05</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-primary-600 hover:text-primary-800" title="View Details">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button class="text-primary-600 hover:text-primary-800" title="Retry Call">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">+256 782 567 890</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Voter Registration</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            In-Progress
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">0m 45s</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Swahili</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Neutral
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2025-04-20 09:14</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-primary-600 hover:text-primary-800" title="Listen Live">
+                                <i class="fas fa-headphones"></i>
+                            </button>
+                            <button class="text-red-600 hover:text-red-800" title="End Call">
+                                <i class="fas fa-phone-slash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">+256 753 678 901</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Presidential Introduction</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Completed
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">3m 05s</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">Runyankole</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Negative
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm text-gray-700">2025-04-20 08:55</td>
+                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-primary-600 hover:text-primary-800" title="View Transcript">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button class="text-primary-600 hover:text-primary-800" title="Play Recording">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-6 flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+            Showing 5 of 1,245 calls
+        </div>
+        <div class="flex space-x-2">
+            <button class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-50" disabled>
+                <i class="fas fa-chevron-left mr-1"></i> Previous
+            </button>
+            <button class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50">
+                Next <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Call Distribution Chart
+        const callDistributionCtx = document.getElementById('callDistributionChart').getContext('2d');
+        const callDistributionChart = new Chart(callDistributionCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Calls',
+                    data: [65, 78, 52, 91, 43, 23, 36],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Sentiment Analysis Chart
+        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentChart = new Chart(sentimentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    data: [45, 35, 20],
+                    backgroundColor: [
+                        '#10B981', // Green
+                        '#F59E0B', // Yellow
+                        '#EF4444'  // Red
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

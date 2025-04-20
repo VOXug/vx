@@ -1,0 +1,118 @@
+{
+  "name": "Presidential Introduction",
+  "description": "A simple introduction flow for the presidential campaign",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "message",
+      "name": "Introduction",
+      "text": "Hello, this is President Museveni calling. I hope you and your family are doing well. I wanted to personally reach out to you regarding the upcoming election.",
+      "next": "talking_point_1"
+    },
+    {
+      "id": "talking_point_1",
+      "type": "message",
+      "name": "Talking Point 1",
+      "text": "Over the past years, we have made significant progress in infrastructure development, healthcare, and education. I would like to know if you've seen improvements in your local community?",
+      "next": "response_1"
+    },
+    {
+      "id": "response_1",
+      "type": "response",
+      "name": "Voter Response 1",
+      "branches": {
+        "positive": "positive_reply_1",
+        "neutral": "neutral_reply_1",
+        "negative": "negative_reply_1"
+      }
+    },
+    {
+      "id": "positive_reply_1",
+      "type": "message",
+      "name": "Positive Reply 1",
+      "text": "I'm glad to hear that you've noticed the improvements. We've been working hard to ensure that development reaches every corner of Uganda. Your support means a lot to us.",
+      "next": "talking_point_2"
+    },
+    {
+      "id": "neutral_reply_1",
+      "type": "message",
+      "name": "Neutral Reply 1",
+      "text": "I understand that progress can sometimes be uneven. We are committed to addressing any gaps and ensuring that all Ugandans benefit from our development programs.",
+      "next": "talking_point_2"
+    },
+    {
+      "id": "negative_reply_1",
+      "type": "message",
+      "name": "Negative Reply 1",
+      "text": "I'm sorry to hear about your concerns. Your feedback is valuable, and I assure you that we are working to address the challenges in your area. Could you tell me more about the specific issues you're facing?",
+      "next": "response_2_negative"
+    },
+    {
+      "id": "talking_point_2",
+      "type": "message",
+      "name": "Talking Point 2",
+      "text": "In my next term, I plan to focus on job creation, especially for our youth, and further improving healthcare access. What issues are most important to you and your family?",
+      "next": "response_2"
+    },
+    {
+      "id": "response_2",
+      "type": "response",
+      "name": "Voter Response 2",
+      "branches": {
+        "positive": "positive_reply_2",
+        "neutral": "neutral_reply_2",
+        "negative": "negative_reply_2"
+      }
+    },
+    {
+      "id": "response_2_negative",
+      "type": "response",
+      "name": "Voter Response 2 (After Negative)",
+      "branches": {
+        "positive": "positive_reply_2_after_negative",
+        "neutral": "neutral_reply_2",
+        "negative": "negative_reply_2"
+      }
+    },
+    {
+      "id": "positive_reply_2",
+      "type": "message",
+      "name": "Positive Reply 2",
+      "text": "Thank you for sharing your priorities. I'm committed to addressing these issues in my next term. Your input helps us shape policies that truly serve the people of Uganda.",
+      "next": "outro"
+    },
+    {
+      "id": "positive_reply_2_after_negative",
+      "type": "message",
+      "name": "Positive Reply 2 (After Negative)",
+      "text": "I appreciate your openness in sharing these concerns. Despite the challenges, I'm glad we can have this dialogue. I promise to personally look into the issues you've raised.",
+      "next": "outro"
+    },
+    {
+      "id": "neutral_reply_2",
+      "type": "message",
+      "name": "Neutral Reply 2",
+      "text": "These are important considerations. We are constantly reviewing our policies to ensure they address the real needs of Ugandans. Your feedback will be taken into account.",
+      "next": "outro"
+    },
+    {
+      "id": "negative_reply_2",
+      "type": "message",
+      "name": "Negative Reply 2",
+      "text": "I understand your frustration. Real change takes time, but I hear your concerns clearly. I would like my team to follow up with you to address these specific issues if that's alright with you.",
+      "next": "outro"
+    },
+    {
+      "id": "outro",
+      "type": "message",
+      "name": "Outro",
+      "text": "Thank you for taking the time to speak with me today. Your voice matters in shaping the future of Uganda. I hope I can count on your support in the upcoming election. Have a blessed day.",
+      "next": "end"
+    },
+    {
+      "id": "end",
+      "type": "end",
+      "name": "End of Conversation"
+    }
+  ]
+}

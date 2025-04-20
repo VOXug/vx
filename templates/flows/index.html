@@ -1,0 +1,408 @@
+{% extends 'base_simple.html' %}
+
+{% block title %}Conversation Flows - Voice AI Campaign System{% endblock %}
+
+{% block breadcrumbs %}
+<a href="{{ url_for('admin.dashboard') }}" class="hover:text-primary-600">Dashboard</a>
+<i class="fas fa-chevron-right text-xs text-gray-400 mx-2"></i>
+<span class="text-gray-700">Conversation Flows</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-xl font-bold text-gray-800">Conversation Flows</h2>
+        <button type="button" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors" onclick="document.getElementById('addFlowModal').classList.remove('hidden')">
+            <i class="fas fa-plus mr-2"></i> Create New Flow
+        </button>
+    </div>
+</div>
+
+<!-- Flows Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+    <!-- Presidential Introduction Flow -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">Presidential Introduction</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-700">Version 1.2</p>
+                        <p class="text-xs text-gray-500">Last updated: 2 days ago</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-700">4 steps</p>
+                    <p class="text-xs text-gray-500">~2 min duration</p>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-2">Languages</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">English</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Luganda</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Swahili</span>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-4">Presidential candidate introduction and campaign platform overview.</p>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors" onclick="document.getElementById('editFlowModal').classList.remove('hidden')">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                    <i class="fas fa-copy mr-1"></i> Duplicate
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash mr-1"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Voter Registration Flow -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">Voter Registration</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-700">Version 2.0</p>
+                        <p class="text-xs text-gray-500">Last updated: 5 days ago</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-700">6 steps</p>
+                    <p class="text-xs text-gray-500">~3 min duration</p>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-2">Languages</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">English</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Luganda</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Swahili</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Runyankole</span>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-4">Helps voters check registration status and provides polling location information.</p>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors" onclick="document.getElementById('editFlowModal').classList.remove('hidden')">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                    <i class="fas fa-copy mr-1"></i> Duplicate
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash mr-1"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Policy Q&A Flow -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-semibold text-gray-800">Policy Q&A</h3>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+        </div>
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-700">Version 1.5</p>
+                        <p class="text-xs text-gray-500">Last updated: 1 week ago</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-700">8 steps</p>
+                    <p class="text-xs text-gray-500">~5 min duration</p>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <p class="text-sm text-gray-500 mb-2">Languages</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">English</span>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Luganda</span>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-4">Answers common questions about candidate policy positions on key issues.</p>
+            
+            <div class="flex space-x-2 mt-4">
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors" onclick="document.getElementById('editFlowModal').classList.remove('hidden')">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                </button>
+                <button class="px-3 py-1.5 bg-primary-50 text-primary-600 rounded text-xs font-medium hover:bg-primary-100 transition-colors">
+                    <i class="fas fa-copy mr-1"></i> Duplicate
+                </button>
+                <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded text-xs font-medium hover:bg-red-100 transition-colors">
+                    <i class="fas fa-trash mr-1"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add New Flow Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-dashed border-gray-300 overflow-hidden hover:shadow-md transition-shadow">
+        <div class="p-8 flex flex-col items-center justify-center h-full">
+            <div class="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 mb-4">
+                <i class="fas fa-plus text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Create New Flow</h3>
+            <p class="text-gray-500 text-sm text-center mb-4">Design a new conversation flow for your campaigns</p>
+            <button onclick="document.getElementById('addFlowModal').classList.remove('hidden')" class="px-4 py-2 bg-primary-600 text-white rounded-md text-sm font-medium hover:bg-primary-700 transition-colors">
+                Create Flow
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Flow Modal -->
+<div id="addFlowModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Create New Conversation Flow</h3>
+            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="document.getElementById('addFlowModal').classList.add('hidden')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form>
+            <div class="mb-4">
+                <label for="flowName" class="block text-sm font-medium text-gray-700 mb-1">Flow Name</label>
+                <input type="text" id="flowName" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="e.g., Election Day Reminder">
+            </div>
+            
+            <div class="mb-4">
+                <label for="flowDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea id="flowDescription" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Describe the purpose of this conversation flow"></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Languages</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="langEn" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                        <label for="langEn" class="ml-2 block text-sm text-gray-700">English</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="langLg" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="langLg" class="ml-2 block text-sm text-gray-700">Luganda</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="langSw" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="langSw" class="ml-2 block text-sm text-gray-700">Swahili</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="langNyn" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="langNyn" class="ml-2 block text-sm text-gray-700">Runyankole</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Flow Type</label>
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <input type="radio" id="typeInformational" name="flowType" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" checked>
+                        <label for="typeInformational" class="ml-2 block text-sm text-gray-700">Informational</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="typeInteractive" name="flowType" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300">
+                        <label for="typeInteractive" class="ml-2 block text-sm text-gray-700">Interactive Q&A</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="typeSurvey" name="flowType" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300">
+                        <label for="typeSurvey" class="ml-2 block text-sm text-gray-700">Survey/Feedback</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center mb-4">
+                <input type="checkbox" id="flowActive" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                <label for="flowActive" class="ml-2 block text-sm text-gray-700">Active</label>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50" onclick="document.getElementById('addFlowModal').classList.add('hidden')">Cancel</button>
+                <button type="button" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">Create & Design Flow</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Flow Modal -->
+<div id="editFlowModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Edit Flow: Presidential Introduction</h3>
+            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="document.getElementById('editFlowModal').classList.add('hidden')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- Flow Settings -->
+            <div class="w-full md:w-1/3">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-medium text-gray-800 mb-3">Flow Settings</h4>
+                    
+                    <div class="mb-4">
+                        <label for="editFlowName" class="block text-sm font-medium text-gray-700 mb-1">Flow Name</label>
+                        <input type="text" id="editFlowName" value="Presidential Introduction" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="editFlowDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea id="editFlowDescription" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Presidential candidate introduction and campaign platform overview.</textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Languages</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="editLangEn" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                                <label for="editLangEn" class="ml-2 block text-sm text-gray-700">English</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="editLangLg" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                                <label for="editLangLg" class="ml-2 block text-sm text-gray-700">Luganda</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="editLangSw" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                                <label for="editLangSw" class="ml-2 block text-sm text-gray-700">Swahili</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="editLangNyn" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                <label for="editLangNyn" class="ml-2 block text-sm text-gray-700">Runyankole</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="editFlowActive" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" checked>
+                        <label for="editFlowActive" class="ml-2 block text-sm text-gray-700">Active</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Flow Designer -->
+            <div class="w-full md:w-2/3">
+                <div class="bg-gray-50 p-4 rounded-lg h-full">
+                    <h4 class="font-medium text-gray-800 mb-3">Flow Designer</h4>
+                    
+                    <div class="space-y-4">
+                        <!-- Step 1 -->
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="text-sm font-medium text-gray-800">Step 1: Introduction</h5>
+                                <div class="flex space-x-1">
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea rows="2" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Hello, this is [Candidate Name]. I'm running for president in the upcoming election and wanted to personally reach out to you.</textarea>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="text-sm font-medium text-gray-800">Step 2: Platform Overview</h5>
+                                <div class="flex space-x-1">
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea rows="2" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">My campaign is focused on economic growth, healthcare reform, and improving education across Uganda. I believe every citizen deserves opportunity and prosperity.</textarea>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="text-sm font-medium text-gray-800">Step 3: Call to Action</h5>
+                                <div class="flex space-x-1">
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea rows="2" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">I hope I can count on your support in the upcoming election. Would you like to learn more about my specific policy positions?</textarea>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="text-sm font-medium text-gray-800">Step 4: Conclusion</h5>
+                                <div class="flex space-x-1">
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button class="p-1 text-gray-500 hover:text-gray-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea rows="2" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">Thank you for your time. Remember to vote on election day, [Election Date]. Together, we can build a better Uganda.</textarea>
+                        </div>
+                        
+                        <!-- Add Step Button -->
+                        <button class="w-full py-2 border border-dashed border-gray-300 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-50 flex items-center justify-center">
+                            <i class="fas fa-plus mr-2"></i> Add Step
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3 mt-6">
+            <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50" onclick="document.getElementById('editFlowModal').classList.add('hidden')">Cancel</button>
+            <button type="button" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">Save Changes</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
